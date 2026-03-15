@@ -1,9 +1,19 @@
-Package: MR.CUE
 Type: Package
-Title: Mendelian randomization accounting for complex correlated horizontal pleiotropy while elucidating shared genetic etiology
+Package: MR.CUE
+Title: Mendelian randomization accounting for complex correlated
+    horizontal pleiotropy while elucidating shared genetic etiology
 Version: 1.0
-Authors@R: c(person("Qing", "Cheng", , "qingcheng0218@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5144-4515")))
-Description: Mendelian randomization accounting for complex correlated horizontal pleiotropy while elucidating shared genetic etiology.
+Authors@R: 
+    person("Qing", "Cheng", , "qingcheng0218@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-5144-4515"))
+Description: Mendelian randomization accounting for complex correlated
+    horizontal pleiotropy while elucidating shared genetic etiology.
 License: GPL (>= 3)
-Imports: Rcpp (>= 1.0.8.3)
-LinkingTo: Rcpp, RcppArmadillo,BH, RcppDist
+Imports: 
+    Rcpp (>= 1.0.8.3)
+LinkingTo: 
+    BH,
+    Rcpp,
+    RcppArmadillo,
+    RcppDist
+Encoding: UTF-8
