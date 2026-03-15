@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^CITATION\.cff$
+^Read-and-delete-me$
+^simulation$
