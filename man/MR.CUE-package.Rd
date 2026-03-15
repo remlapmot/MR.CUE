@@ -13,8 +13,9 @@
 The DESCRIPTION file:
 \packageDESCRIPTION{MR.CUE}
 \packageIndices{MR.CUE}
-~~ An overview of how to use the package, including the most ~~
-~~ important functions ~~
+The main user-facing functions are \code{\link{MRCUE}}, \code{\link{MRCUEIndep}},
+and \code{\link{MRCUESim}} for Mendelian randomization analysis, and
+\code{\link{ReadSummaryStat}} and \code{\link{EstRho}} for data preparation.
 }
 \author{
 \packageAuthor{MR.CUE}
