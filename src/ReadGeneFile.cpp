@@ -3,11 +3,11 @@
 #include <iostream>
 #include <thread>
 #include <mutex>
-#include "ReadGeneFile.hpp"
-#include "CalCorr.hpp"
-#include "data_loader.hpp"
+#include "ReadGeneFile.h"
+#include "CalCorr.h"
+#include "data_loader.h"
 #include <ctime>
-#include "truncatedNormal.hpp"
+#include "truncatedNormal.h"
 
 using namespace Rcpp;
 using namespace arma;
@@ -159,8 +159,7 @@ void readPlink(string stringname,int N, int P, unsigned* X){
   
   unsigned long mode =  mode0.to_ulong();
   if(mode == 0){
-    printf ("individual-Major Order:improper type of plink file");
-    exit (EXIT_FAILURE);
+    Rcpp::stop("individual-Major Order:improper type of plink file");
   }
   //     cout << "SNP-Major Order" << endl;
   // }else if(mode == 0){

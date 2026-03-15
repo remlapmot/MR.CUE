@@ -5,12 +5,12 @@
 #include <mutex>
 #include <ctime>
 #include <cmath>
-#include "ReadGeneFile.hpp"
-#include "CalCorr.hpp"
-#include "data_loader.hpp"
-#include "GibbsGamgamEta_ptr.hpp"
-#include "truncatedNormal.hpp"
-#include "function.hpp"
+#include "ReadGeneFile.h"
+#include "CalCorr.h"
+#include "data_loader.h"
+#include "GibbsGamgamEta_ptr.h"
+#include "truncatedNormal.h"
+#include "function.h"
 
 using namespace Rcpp;
 using namespace arma;

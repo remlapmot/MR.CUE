@@ -22,14 +22,6 @@ The DESCRIPTION file:
 Maintainer: \packageMaintainer{MR.CUE}
 }
 \references{
-~~ Literature or other references for background information ~~
+Cheng, Q. et al. (2022) Mendelian randomization accounting for complex correlated horizontal pleiotropy while elucidating shared genetic etiology. Nature Communications 13, 6490.
 }
-~~ Optionally other standard keywords, one per line, from file ~~
-~~ KEYWORDS in the R documentation directory ~~
 \keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-}

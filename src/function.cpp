@@ -1,7 +1,7 @@
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include <iostream>
-#include "CalCorr.hpp"
+#include "CalCorr.h"
 
 using namespace Rcpp;
 using namespace arma;

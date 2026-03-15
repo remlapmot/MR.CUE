@@ -4,7 +4,7 @@
 #include <thread>
 #include <mutex>
 #include <random>
-#include "GibbsGamgamEta_ptr.hpp"
+#include "GibbsGamgamEta_ptr.h"
 
 
 using namespace Rcpp;

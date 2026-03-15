@@ -2,7 +2,7 @@
 #include <Rcpp.h>
 #include "time.h"
 #include <iostream>
-#include "ReadGeneFile.hpp"
+#include "ReadGeneFile.h"
 
 using namespace Rcpp;
 using namespace arma;

@@ -13,7 +13,7 @@
 #include <iostream>
 #include <thread>
 #include <vector>
-#include "ReadGeneFile.hpp"
+#include "ReadGeneFile.h"
 
 
 
