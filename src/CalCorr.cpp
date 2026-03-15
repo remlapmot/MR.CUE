@@ -147,7 +147,7 @@ void cal_blocks(vector<DataBlock> &datablocks, arma::ivec bp, arma::ivec chr, st
         if (block_no < last_block_no){
           // int last_chrom = datablocks[datablocks.size() - 1].chrom;
           if (last_chrom == (int)(i)){
-            cout << "Error Order" << endl;
+            Rcpp::Rcout << "Error Order" << endl;
           }
         }
         if (block_no != last_block_no && last_block_no != -1){
@@ -161,7 +161,7 @@ void cal_blocks(vector<DataBlock> &datablocks, arma::ivec bp, arma::ivec chr, st
         // In case that the last location of last chrom equals to the current location,
         // they may combine the blocks, we wanna start a new block (different chroms should not be assigned in the same block).
         if(block_no == last_block_no&&kk==0){
-          // cout << "if change blocks!!" << endl;
+          // Rcpp::Rcout << "if change blocks!!" << endl;
           DataBlock block((int)i, last_block_no);
           block.start = block_vector[0];
           block.end = block_vector[block_vector.size() - 1];
@@ -212,20 +212,20 @@ List test_blocks(arma::ivec bp, arma::ivec chr, std::string block_file){
     // chr_index[i - 1] = sum(chr==i);
     sum2 += chr_index[i - 1];
   }
-  // cout<< "chr_index:"<<chr_index.t()<<endl;
+  // Rcpp::Rcout<< "chr_index:"<<chr_index.t()<<endl;
   ivec tmpsum = cumsum(chr_index);
   uword n_chrom = chr_index.size();
   vector<int> block_vector;
   int last_block_no = -1;
-  // cout << "check error 0 "<< endl;
-  // cout << "n_chrom: "<< n_chrom << endl;
-  // cout <<"tmpsum:"<< tmpsum<<endl;
+  // Rcpp::Rcout << "check error 0 "<< endl;
+  // Rcpp::Rcout << "n_chrom: "<< n_chrom << endl;
+  // Rcpp::Rcout <<"tmpsum:"<< tmpsum<<endl;
 
 
   for (uword i = 0; i < n_chrom; i++) {
     ivec u_i = get_interval(tmpsum, i);
-    // cout << "check error" <<endl;
-    // cout <<"u_i:"<<u_i.t()<<endl;
+    // Rcpp::Rcout << "check error" <<endl;
+    // Rcpp::Rcout <<"u_i:"<<u_i.t()<<endl;
     int chri_idx = chrom_list[i] - 1;
     umat block_i = blocks[chri_idx];
     uword n_block = block_i.n_rows;
@@ -245,7 +245,7 @@ List test_blocks(arma::ivec bp, arma::ivec chr, std::string block_file){
       if (block_no != -1){
         if (block_no < last_block_no){
           if (last_chrom == chri_idx){
-            cout << "Error Order" << endl;
+            Rcpp::Rcout << "Error Order" << endl;
           }
         }
         if (block_no != last_block_no && last_block_no != -1){
@@ -263,7 +263,7 @@ List test_blocks(arma::ivec bp, arma::ivec chr, std::string block_file){
     }
   }
 
-  // cout << "check error 1"<< endl;
+  // Rcpp::Rcout << "check error 1"<< endl;
   if (block_vector.size() > 0){
     DataBlock block((int)(n_chrom - 1), last_block_no);
     block.start = block_vector[0];
@@ -280,15 +280,15 @@ List test_blocks(arma::ivec bp, arma::ivec chr, std::string block_file){
   // for (int i = 0; i < (int)(datablocks.size()); i++){
   //   int chrom_idx = datablocks[i].chrom;
   //   uvec idx_u = find(chrom_list == chrom_idx + 1);
-  //   // cout <<"i:" << i << "idx_u: " << idx_u<<endl;
-  //   cout<<"chrom_idx :"<<chrom_idx <<endl;
+  //   // Rcpp::Rcout <<"i:" << i << "idx_u: " << idx_u<<endl;
+  //   Rcpp::Rcout<<"chrom_idx :"<<chrom_idx <<endl;
   //   uword idx = idx_u[0];
   //   chrom_vec[i] = (int)idx;
   // }
 
 
   // -------------------------------------------------------
-  // cout << "check error2 "<< endl;
+  // Rcpp::Rcout << "check error2 "<< endl;
   uword nblocks = datablocks.size();
   umat block_inf = zeros<umat>(nblocks, 2);
   for(int ii = 0; ii<(int)(nblocks); ii++){
@@ -534,32 +534,32 @@ List Cal_blockR(arma::ivec &bp, arma::ivec &chr, arma::uvec &avbIndex, arma::uve
                 std::string stringname3,  double ld_r2_thresh, int coreNum, double lam){
 
   vector<DataBlock> datablocks;
-  cout << "Start partition the block:" << endl;
+  Rcpp::Rcout << "Start partition the block:" << endl;
   clock_t t1 = clock();
 
   cal_blocks(datablocks, bp, chr, block_file);
   
-  cout << "Start partition the block: in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
-  cout << endl;
+  Rcpp::Rcout << "Start partition the block: in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
+  Rcpp::Rcout << endl;
   
-  cout << "Start loading the pannel data:" << endl;
+  Rcpp::Rcout << "Start loading the pannel data:" << endl;
   t1 = clock();
-  cout<<"check error 00"<<endl;
+  Rcpp::Rcout<<"check error 00"<<endl;
 
   string famfile = stringname3;
   famfile +=".fam";
   string bimfile = stringname3;
   bimfile += ".bim";
-  cout<<"check error 01"<<endl;
+  Rcpp::Rcout<<"check error 01"<<endl;
   int N = getLineNum(famfile);
   int P = getLineNum(bimfile);
   long long Nlong = (long long)N;
   long long Plong = (long long)P;
-  cout<<"check error 02"<<"N:"<<Nlong << "P:" <<Plong << endl;
+  Rcpp::Rcout<<"check error 02"<<"N:"<<Nlong << "P:" <<Plong << endl;
   unsigned* X0 = new unsigned[Nlong * Plong];
-  cout<<"check error 03"<<"N:"<<N << "P:" <<P<<endl;
+  Rcpp::Rcout<<"check error 03"<<"N:"<<N << "P:" <<P<<endl;
   readPlink(stringname3, N, P, X0);
-  cout<<"check error 04"<<endl;
+  Rcpp::Rcout<<"check error 04"<<endl;
   arma::Mat<unsigned>* Xdata =  new arma::Mat<unsigned>(X0, N, P, false, false);
   //
   uword M = Xdata -> n_cols;
@@ -575,7 +575,7 @@ List Cal_blockR(arma::ivec &bp, arma::ivec &chr, arma::uvec &avbIndex, arma::uve
     // for(int i = 0; i < idx4panel.n_elem; i++){
     //   X->cols(i) = 2 - X->cols(idx4panel.elem(i));
     // }
-    cout <<"Revise the genotype data for matching with exposure." << endl;
+    Rcpp::Rcout <<"Revise the genotype data for matching with exposure." << endl;
     
     X->cols(idx4panel) = 2 - X->cols(idx4panel);
   }
@@ -598,7 +598,7 @@ List Cal_blockR(arma::ivec &bp, arma::ivec &chr, arma::uvec &avbIndex, arma::uve
   // umat block_inf = zeros<umat>(nblocks, 2);
   // uvec Nb = zeros<uvec>(nblocks, 1);
   
-  cout << "Start caculating the correlation between SNPs :" << endl;
+  Rcpp::Rcout << "Start caculating the correlation between SNPs :" << endl;
   t1 = clock();
   // -----------------------------------------------------------------------
   // parallel for correlation matrix
@@ -619,10 +619,10 @@ List Cal_blockR(arma::ivec &bp, arma::ivec &chr, arma::uvec &avbIndex, arma::uve
   F4index = parobj.F4index;
   Nidex = parobj.Nidex;
   Nb = parobj.Nb;
-  cout << "Finish caculating the correlation between SNPs in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
-  cout << endl;
+  Rcpp::Rcout << "Finish caculating the correlation between SNPs in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
+  Rcpp::Rcout << endl;
   // ---------------------------------------------------------------------------
-  // cout << "Start caculating the correlation of overlap:" << endl;
+  // Rcpp::Rcout << "Start caculating the correlation of overlap:" << endl;
   // t1 = clock();
   ivec Indpid = zeros<ivec>(sum(Nidex), 1);
   uvec Nsumidex = cumsum<uvec>(Nidex);
@@ -760,7 +760,7 @@ List Cal_block_Rmatrix(arma::ivec &bp, arma::ivec &chr, arma::uvec &avbIndex, ar
     // 
     // // vec indj0 = indj.elem(Indpid);
     // uvec idx = as<uvec>(Indpid);
-    // cout<< indj.elem(idx).t() << endl;
+    // Rcpp::Rcout<< indj.elem(idx).t() << endl;
     // IndR.col(j) = indj.elem(Indpid);
   }
 
@@ -814,7 +814,7 @@ Rcpp::List IndepSummary(arma::ivec &bp, arma::ivec &chr, arma::uvec &avbIndex, s
   
   uvec idx4panel;
   
-  cout <<"idx4panel:"<< idx4panel.n_elem<< endl;
+  Rcpp::Rcout <<"idx4panel:"<< idx4panel.n_elem<< endl;
 
   List Rblockres = Cal_blockR(bp, chr, avbIndex, idx4panel, block_file,
                               stringname3, ld_r2_thresh,  coreNum, lam);
@@ -871,7 +871,7 @@ imat comb(int p)
   vector<int> myVector;
   std::string bitmask(2, 1); // K leading 1's
   bitmask.resize(p, 0); // N-K trailing 0's
-  // cout << bitmask << endl;
+  // Rcpp::Rcout << bitmask << endl;
   // print integers and permute bitmask
   do {
     for (int i = 0; i < p; ++i) // [0..N-1] integers
@@ -897,7 +897,7 @@ vec Mat2Vec(mat R){
   imat at = comb(R.n_rows);
   int p = at.n_rows;
   vec RV = zeros(p, 1);
-  // cout << at << endl;
+  // Rcpp::Rcout << at << endl;
   int j, k;
   for(int i = 0; i < (int)p; i++){
     j = at(i, 0);

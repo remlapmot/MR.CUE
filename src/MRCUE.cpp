@@ -187,7 +187,7 @@ ObjGibbs3 M3indepPXGibbsObj(arma::vec &gammah, arma::vec &Gammah, arma::vec &se1
     
     
     if(tbtau1<0 || tatau1 <0){
-      cout << "error!!" << "tbtau1:" << tbtau1 << "tatau1:" << tatau1<< endl;
+      Rcpp::Rcout << "error!!" << "tbtau1:" << tbtau1 << "tatau1:" << tatau1<< endl;
     }
     
     if(sum(Eta)!=0 && tbtau1!=0 && tatau1!=0){
@@ -201,7 +201,7 @@ ObjGibbs3 M3indepPXGibbsObj(arma::vec &gammah, arma::vec &Gammah, arma::vec &se1
     taxi2 = 0.5*sum(1 - Eta);
     tbxi2 = 0.5*sum(err02)/tau02;
     if(taxi2<0 || tbxi2 <0){
-      cout << "error!!" << "taxi2:" << taxi2 << "tbxi2:" << tbxi2<< endl;
+      Rcpp::Rcout << "error!!" << "taxi2:" << taxi2 << "tbxi2:" << tbxi2<< endl;
     }
     if(taxi2!=0 && tbxi2!=0){
       xi2 =  1 / randg<double>(distr_param(taxi2, 1/tbxi2));  

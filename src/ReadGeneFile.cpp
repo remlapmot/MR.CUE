@@ -89,7 +89,7 @@ void vec_sub(arma::vec& v0, double m_value, double squaresum){
 //   std::bitset<8> mode0(buff[2]);
 //   
 //   if (magic1.to_ulong() != 108 || magic2.to_ulong() != 27){
-//     //   cout <<"Error Identifier of plink binary file" << endl;
+//     //   Rcpp::Rcout <<"Error Identifier of plink binary file" << endl;
 //   }
 //   
 //   unsigned long mode = mode0.to_ulong();
@@ -133,7 +133,7 @@ void vec_sub(arma::vec& v0, double m_value, double squaresum){
 //     delete[] geno;
 //     delete[] genotype;
 //     n++;
-//     //    cout <<n << " processing"<<endl;
+//     //    Rcpp::Rcout <<n << " processing"<<endl;
 //   }
 //   
 //   
@@ -154,27 +154,27 @@ void readPlink(string stringname,int N, int P, unsigned* X){
   std::bitset<8> mode0(buff[2]);
   
   if(magic1.to_ulong() != 108 || magic2.to_ulong() != 27){
-    //   cout <<"Error Identifier of plink binary file" << endl;
+    //   Rcpp::Rcout <<"Error Identifier of plink binary file" << endl;
   }
   
   unsigned long mode =  mode0.to_ulong();
   if(mode == 0){
     Rcpp::stop("individual-Major Order:improper type of plink file");
   }
-  //     cout << "SNP-Major Order" << endl;
+  //     Rcpp::Rcout << "SNP-Major Order" << endl;
   // }else if(mode == 0){
-  //    cout << "individual-Major Order" << endl;
+  //    Rcpp::Rcout << "individual-Major Order" << endl;
   // }
   // X = new int[N*P];
-  //cout << N << "x" << P << endl;
-  //cout << sizeof(*X) << endl;
+  //Rcpp::Rcout << N << "x" << P << endl;
+  //Rcpp::Rcout << sizeof(*X) << endl;
   long n = 0;
   long long charNum = ceil(N*1.0/4)*10000;
   long long leftGenoNum = ceil(N*1.0/4)*P;
   long nblock = ceil(N*1.0/4);
   long nSNP = 0;
-  //cout << "nblock: " << nblock << endl;
-  //cout << "leftGenoNum: " << leftGenoNum << endl;
+  //Rcpp::Rcout << "nblock: " << nblock << endl;
+  //Rcpp::Rcout << "leftGenoNum: " << leftGenoNum << endl;
   while (!feof(fp)) {
     if(leftGenoNum <= 0)
       break;
@@ -186,16 +186,16 @@ void readPlink(string stringname,int N, int P, unsigned* X){
     unsigned* geno = new unsigned[4];
     long nSNPc = long(charNum / nblock); //number of SNPs of this iteration
     
-    //cout << n << "-th line: ";
-    //cout << "nSNPc: "<< nSNPc << endl;
-    // cout << sizeof(int) << endl;
+    //Rcpp::Rcout << n << "-th line: ";
+    //Rcpp::Rcout << "nSNPc: "<< nSNPc << endl;
+    // Rcpp::Rcout << sizeof(int) << endl;
     long long idx = 0;
     for (long i=0; i < nSNPc; i++) {
       
       /*if ( n >= 4 ){
-      cout << i << "-th snp" << endl;
+      Rcpp::Rcout << i << "-th snp" << endl;
       if (i == 0){
-      //cout << "break 1 ... " << nSNP << ";" << N << ";" << leftGenoNum << ";" << idx << endl;
+      //Rcpp::Rcout << "break 1 ... " << nSNP << ";" << N << ";" << leftGenoNum << ";" << idx << endl;
       }
     }*/
       for(long j=0; j < nblock - 1; j++){
@@ -204,8 +204,8 @@ void readPlink(string stringname,int N, int P, unsigned* X){
         // if ( n == 3 && i == 9999  && j == nblock - 2){
         /*if ( n == 3 && j == nblock - 2 && i > 5000 ){
         // long long indxt = nSNP * N + j*4;
-        // cout << "break 2 ... " << endl;
-        cout << "break 1 ... "<< n << "-th line, " << i << "-th snp: " << N <<";" << j  << ";" << 
+        // Rcpp::Rcout << "break 2 ... " << endl;
+        Rcpp::Rcout << "break 1 ... "<< n << "-th line, " << i << "-th snp: " << N <<";" << j  << ";" << 
           indx << ";" << leftGenoNum << ";" << idx << endl;
       }*/
         
@@ -218,9 +218,9 @@ void readPlink(string stringname,int N, int P, unsigned* X){
         leftGenoNum -= 1;
   }
       //if ( n == 4  && i == 0 ){
-      //	cout << "break 4 ... " << endl;
+      //	Rcpp::Rcout << "break 4 ... " << endl;
       //}
-      // cout << "break 1 ... " << endl;
+      // Rcpp::Rcout << "break 1 ... " << endl;
       long left = N - (nblock - 1)*4;
       std::bitset<8> bits(genotype[idx]);
       getFourGentype(geno,bits);
@@ -228,7 +228,7 @@ void readPlink(string stringname,int N, int P, unsigned* X){
       long long indx2 = (long long)(nSNP) * (long long)(N) + (long long)(nblock - 1)*4;
       long long indx3 = left*sizeof(unsigned);
       /*if ( n == 3 && i > 5000 ){
-      cout << "break 2 ... " << n << "-th line, " << i << "-th snp: " << nSNP << ";" << 
+      Rcpp::Rcout << "break 2 ... " << n << "-th line, " << i << "-th snp: " << nSNP << ";" << 
         N << ";" << nblock << ";" << indx2 << ";" << indx3 << endl;
       }*/
       memcpy(X + indx2, geno, indx3);
@@ -240,7 +240,7 @@ void readPlink(string stringname,int N, int P, unsigned* X){
     delete[] geno;
     delete[] genotype;
     n++;
-    //    cout <<n << " processing"<<endl;
+    //    Rcpp::Rcout <<n << " processing"<<endl;
     }
   
   

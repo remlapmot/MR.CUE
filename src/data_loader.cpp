@@ -28,8 +28,8 @@ Rcpp::List ReadSNPinfo(std::string stringname, IntegerVector A1, IntegerVector A
   /* Put in various data. */
   for (int i = 0; i < N; i++){
     if (i % 100000 == 0 && i != 0){
-      cout << i << "-th SNP" << ",";
-      cout << "Elapsed time is " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec" << endl;
+      Rcpp::Rcout << i << "-th SNP" << ",";
+      Rcpp::Rcout << "Elapsed time is " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec" << endl;
     }
     
     fscanf(stream, "%i %s %lf %i %c %c", &ch, &s[0], &mor, &b, &efa, &nefa);
@@ -68,8 +68,8 @@ void Read_summarystat(std::string stringname, IntegerVector SA1, IntegerVector S
   
   for (int i = 0; i < (N+8); i++){
     if (i % 200000 == 0 && i != 0){
-      cout << i << "-th SNP" << ",";
-      cout << "Elapsed time is " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec" << endl;
+      Rcpp::Rcout << i << "-th SNP" << ",";
+      Rcpp::Rcout << "Elapsed time is " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec" << endl;
     }
     
     fscanf(stream, "%s %i  %i %c %c %lf %lf %lf", &s[0], &ch, &b, &efa, &nefa, &bhat, &se2, &pv);
@@ -77,7 +77,7 @@ void Read_summarystat(std::string stringname, IntegerVector SA1, IntegerVector S
     if(i > 7){
       //ignore the colnames
       rsname(i - 8) = s;
-      //cout << s << efa << nefa << bhat << se2 << samsize << ";" << endl;
+      //Rcpp::Rcout << s << efa << nefa << bhat << se2 << samsize << ";" << endl;
       SA1(i - 8) = (int)efa;
       SA2(i - 8) = (int)nefa;
       betah(i - 8) = bhat;
@@ -119,7 +119,7 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
   bimfile += ".bim";
   
   int N = getLineNum(bimfile);
-  cout << "Number of SNPs (panel):" << N << endl;
+  Rcpp::Rcout << "Number of SNPs (panel):" << N << endl;
   
   
   IntegerVector A31(N), A32(N);
@@ -128,42 +128,42 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
   NumericVector morgan(N);
   
   //read from SNPinfo file (pass as pointer)
-  cout << endl;
-  cout << "Start loading SNP info:" << endl;
+  Rcpp::Rcout << endl;
+  Rcpp::Rcout << "Start loading SNP info:" << endl;
   clock_t t1 = clock();
   ReadSNPinfo(bimfile, A31, A32, rsname3, chr3, bp3, morgan, N);
-  cout << "Finish loading SNP info fro panel data in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
+  Rcpp::Rcout << "Finish loading SNP info fro panel data in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
   
   //----------------------------------------------------------------------------------------------//
   // summary stat SNP info for trait 1, betah, s2, sample_size
   int Ns1 = getLineNum(stringname1) - 1;// ignore the colnames line
   
-  cout << "Number of SNPs (exposure):" << Ns1 << endl;
+  Rcpp::Rcout << "Number of SNPs (exposure):" << Ns1 << endl;
   
   IntegerVector SA11(Ns1), SA12(Ns1), chr1(Ns1), bp1(Ns1);
   CharacterVector rsname1(Ns1);
   NumericVector betah1(Ns1), s12(Ns1), PV1(Ns1), sample_size(Ns1);
   
-  cout << endl;
-  printf("Start loading exposure summary stat: \n");
+  Rcpp::Rcout << endl;
+  Rprintf("Start loading exposure summary stat: \n");
   t1 = clock();
   Read_summarystat(stringname1, SA11, SA12, rsname1, betah1, s12, PV1, chr1, bp1, Ns1);
-  cout << "Finish loading exposure summary stat in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
+  Rcpp::Rcout << "Finish loading exposure summary stat in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
   //----------------------------------------------------------------------------------------------//
   // summary stat SNP info for trait 2, betah, s2, sample_size
   int Ns2 = getLineNum(stringname2) - 1;// ignore the colnames line
-  cout << "Number of SNPs (outcome):" << Ns2 << endl;
+  Rcpp::Rcout << "Number of SNPs (outcome):" << Ns2 << endl;
   
   IntegerVector SA21(Ns2), SA22(Ns2), chr2(Ns2), bp2(Ns2);
   CharacterVector rsname2(Ns2);
   NumericVector betah2(Ns2), s22(Ns2), PV2(Ns2);
   
-  cout << endl;
-  printf("Start loading  outcome summary stat 2: \n");
+  Rcpp::Rcout << endl;
+  Rprintf("Start loading  outcome summary stat 2: \n");
   t1 = clock();
   Read_summarystat(stringname2, SA21, SA22, rsname2, betah2, s22, PV2, chr2, bp2, Ns2);
   
-  cout << "Finish loading outcome summary stat 2 in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
+  Rcpp::Rcout << "Finish loading outcome summary stat 2 in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
   //----------------------------------------------------------------------------------------------//
   //mathcing panel SNP with summary stat and correct direction of minor allele
   CharacterVector rs_tmp = intersect(rsname1, rsname2);
@@ -175,14 +175,14 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
   CharacterVector rsname_4use = rsname3[Rcpp::is_na(idxin3) == false]; // rsname in both panel and ss in the order of panel.
   IntegerVector bp3_4use = bp3[Rcpp::is_na(idxin3) == false]; // bp3 for block diagonal
   IntegerVector chr3_4use = chr3[Rcpp::is_na(idxin3) == false]; // chr3 for block diagonal
-  // cout << "size of intersect: " << rsname_4use.size() << endl;
+  // Rcpp::Rcout << "size of intersect: " << rsname_4use.size() << endl;
   
-  cout << endl;
+  Rcpp::Rcout << endl;
   //----------------------------------------------------------------------------------------------//
-  printf("Start matching SNPs with summary stat for exposure. \n");
+  Rprintf("Start matching SNPs with summary stat for exposure. \n");
   //match snps (rsname_4use; rsname1: trait)
   IntegerVector idxin1 = match(rsname_4use, rsname1);  //index for SNPs in ss
-  // cout << "size of summarystat 1:" << idxin1.size() << endl;
+  // Rcpp::Rcout << "size of summarystat 1:" << idxin1.size() << endl;
   uvec idx = as<uvec>(idxin1) -1;
   fvec tmp = as<fvec>(betah1);
   fvec bhat1 = tmp.elem(idx);
@@ -196,7 +196,7 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
   tmp2 = as<uvec>(SA12);
   uvec SA12_ = tmp2.elem(idx);
   //----------------------------------------------------------------------------------------------//
-  printf("Start matching SNPs with summary stat for outcome. \n");
+  Rprintf("Start matching SNPs with summary stat for outcome. \n");
   //match snps (rsname_4use; rsname1: trait)
   IntegerVector idxin2 = match(rsname_4use, rsname2);  //index for SNPs in ss
   
@@ -214,12 +214,12 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
   uvec SA22_ = tmp2.elem(idx);
   //----------------------------------------------------------------------------------------------//
   //match snps (rsname_4use; rsname3: panel)
-  printf("Start matching SNPs with panel. \n");
-  cout << endl;
+  Rprintf("Start matching SNPs with panel. \n");
+  Rcpp::Rcout << endl;
   idxin3 = match(rsname_4use, rsname3); //index for SNPs in panel SNPs
   //----------------------------------------------------------------------------------------------//
   //compare direction
-  // cout << "Size of matched SNPs: " << rsname_4use.size() << endl; //compare keepIndx in R: Height_1000Q_match.R
+  // Rcpp::Rcout << "Size of matched SNPs: " << rsname_4use.size() << endl; //compare keepIndx in R: Height_1000Q_match.R
   idx = as<uvec>(idxin3) -1;
   //mat R = tmp1.rows(idx);
   tmp2 = as<uvec>(A31);
@@ -241,7 +241,7 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
   A31_.elem(idx) = A31_.elem(idx) - 32;
   idx = find(A32_ > 85);
   A32_.elem(idx) = A32_.elem(idx) - 32;
-  // cout << "check error 2" << endl;
+  // Rcpp::Rcout << "check error 2" << endl;
   //compare A31_ SA11_, A32_ SA12_
   //A31_: replace T with A,replace G with C
   idx = find(A31_ == 84);
@@ -308,7 +308,7 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
   uvec idxrepl12(idx.n_elem);
   idxrepl12.fill(67);
   SA22_.elem(idx) = idxrepl12;
-  // cout << "SA22_:" << SA22_.size() << endl;
+  // Rcpp::Rcout << "SA22_:" << SA22_.size() << endl;
   
   
   // #############################################################
@@ -365,7 +365,7 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
     ind1.ones();
     ind1 = -ind1;
     ind1.elem(idx1).ones();
-    cout << "direction (compare with trait_1000Q_match.R): " << sum(ind1) << endl; //compare sum(ind) in R: Height_1000Q_match.R
+    Rcpp::Rcout << "direction (compare with trait_1000Q_match.R): " << sum(ind1) << endl; //compare sum(ind) in R: Height_1000Q_match.R
     
     bh1 = bh1 % ind1;
     
@@ -378,8 +378,8 @@ Rcpp::List matchsnp(std::string stringname1, std::string stringname2,
     ind2.ones();
     ind2 = -ind2;
     ind2.elem(idx2).ones();
-    cout << "direction (compare with trait_1000Q_match.R): " << sum(ind2) << endl; //compare sum(ind) in R: Height_1000Q_match.R
-    cout << "Size of matched SNPs (remove ambiguous SNPs): " << A31_r.n_elem << endl;
+    Rcpp::Rcout << "direction (compare with trait_1000Q_match.R): " << sum(ind2) << endl; //compare sum(ind) in R: Height_1000Q_match.R
+    Rcpp::Rcout << "Size of matched SNPs (remove ambiguous SNPs): " << A31_r.n_elem << endl;
     bh2 = bh2 % ind2;
   }
   // #############################################################
@@ -429,7 +429,7 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   NumericVector betah1(Ns1), s12(Ns1), PV1(Ns1);
   
   Read_summarystat(stringname1, SA11, SA12, rsname1, betah1, s12, PV1, chr1, bp1, Ns1);
-  cout << "rsname1.size()" <<rsname1.size()<<endl;
+  Rcpp::Rcout << "rsname1.size()" <<rsname1.size()<<endl;
   
   CharacterVector scre_rs1 = intersect(rsname0, rsname1);
   IntegerVector scre_idx1 = match(rsname1, scre_rs1);
@@ -441,7 +441,7 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   PV1 = PV1[Rcpp::is_na(scre_idx1) == false];
   chr1 = chr1[Rcpp::is_na(scre_idx1) == false];
   bp1 = bp1[Rcpp::is_na(scre_idx1) == false];
-  cout << "rsname1.size()" <<rsname1.size()<<endl;
+  Rcpp::Rcout << "rsname1.size()" <<rsname1.size()<<endl;
   //  //----------------------------------------------------------------------------------------------//
   // summary stat SNP info for trait 2, betah, s2, sample_size
   int Ns2 = getLineNum(stringname2) - 1; // ignore the colnames line
@@ -468,7 +468,7 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   bimfile += ".bim";
   
   int N = getLineNum(bimfile);
-  cout << "Number of SNPs (panel):" << N << endl;
+  Rcpp::Rcout << "Number of SNPs (panel):" << N << endl;
   
   
   IntegerVector A31(N), A32(N);
@@ -477,32 +477,32 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   NumericVector morgan(N);
   
   //read from SNPinfo file (pass as pointer)
-  cout << endl;
-  cout << "Start loading SNP info:" << endl;
+  Rcpp::Rcout << endl;
+  Rcpp::Rcout << "Start loading SNP info:" << endl;
   clock_t t1 = clock();
   ReadSNPinfo(bimfile, A31, A32, rsname3, chr3, bp3, morgan, N);
-  cout << "Finish loading SNP info for panel data in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
+  Rcpp::Rcout << "Finish loading SNP info for panel data in " << (clock() - t1)*1.0 / CLOCKS_PER_SEC << " sec." << endl;
   
   //----------------------------------------------------------------------------------------------//
   //mathcing panel SNP with summary stat and correct direction of minor allele
   CharacterVector rs_tmp = intersect(rsname1, rsname2);
   CharacterVector rs_inter = intersect(rs_tmp, rsname3);
   //----------------------------------------------------------------------------------------------//
-  // cout << "check error 0" <<endl;
+  // Rcpp::Rcout << "check error 0" <<endl;
   //Panel Data
   IntegerVector idxin3 = match(rsname3, rs_inter);
   
   CharacterVector rsname_4use = rsname3[Rcpp::is_na(idxin3) == false]; // rsname in both panel and ss in the order of panel.
   IntegerVector bp3_4use = bp3[Rcpp::is_na(idxin3) == false]; // bp3 for block diagonal
   IntegerVector chr3_4use = chr3[Rcpp::is_na(idxin3) == false]; // chr3 for block diagonal
-  // cout << "size of intersect: " << rsname_4use.size() << endl;
+  // Rcpp::Rcout << "size of intersect: " << rsname_4use.size() << endl;
   
-  // cout << "check error 1" <<endl;
+  // Rcpp::Rcout << "check error 1" <<endl;
   //----------------------------------------------------------------------------------------------//
-  printf("Start matching SNPs with summary stat for trait 1. \n");
+  Rprintf("Start matching SNPs with summary stat for trait 1. \n");
   //match snps (rsname_4use; rsname1: trait)
   IntegerVector idxin1 = match(rsname_4use, rsname1);  //index for SNPs in ss
-  // cout << "size of summarystat 1:" << idxin1.size() << endl;
+  // Rcpp::Rcout << "size of summarystat 1:" << idxin1.size() << endl;
   uvec idx = as<uvec>(idxin1) -1;
   fvec tmp = as<fvec>(betah1);
   fvec bhat1 = tmp.elem(idx);
@@ -516,10 +516,10 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   tmp2 = as<uvec>(SA12);
   uvec SA12_ = tmp2.elem(idx);
   //----------------------------------------------------------------------------------------------//
-  printf("Start matching SNPs with summary stat for trait 2. \n");
+  Rprintf("Start matching SNPs with summary stat for trait 2. \n");
   //match snps (rsname_4use; rsname1: trait)
   IntegerVector idxin2 = match(rsname_4use, rsname2);  //index for SNPs in ss
-  cout << "size of summarystat 2:" << idxin2.size() << endl;
+  Rcpp::Rcout << "size of summarystat 2:" << idxin2.size() << endl;
   idx = as<uvec>(idxin2) -1;
   tmp = as<fvec>(betah2);
   fvec bhat2 = tmp.elem(idx);
@@ -534,11 +534,11 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   uvec SA22_ = tmp2.elem(idx);
   //----------------------------------------------------------------------------------------------//
   //match snps (rsname_4use; rsname3: panel)
-  printf("Start matching SNPs with panel. \n");
+  Rprintf("Start matching SNPs with panel. \n");
   idxin3 = match(rsname_4use, rsname3); //index for SNPs in panel SNPs
   //----------------------------------------------------------------------------------------------//
   //compare direction
-  // cout << "Size of matched SNPs: " << rsname_4use.size() << endl; //compare keepIndx in R: Height_1000Q_match.R
+  // Rcpp::Rcout << "Size of matched SNPs: " << rsname_4use.size() << endl; //compare keepIndx in R: Height_1000Q_match.R
   idx = as<uvec>(idxin3) -1;
   //mat R = tmp1.rows(idx);
   tmp2 = as<uvec>(A31);
@@ -560,7 +560,7 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   A31_.elem(idx) = A31_.elem(idx) - 32;
   idx = find(A32_ > 85);
   A32_.elem(idx) = A32_.elem(idx) - 32;
-  // cout << "check error 2" << endl;
+  // Rcpp::Rcout << "check error 2" << endl;
   //compare A31_ SA11_, A32_ SA12_
   //A31_: replace T with A,replace G with C
   idx = find(A31_ == 84);
@@ -627,7 +627,7 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
   uvec idxrepl12(idx.n_elem);
   idxrepl12.fill(67);
   SA22_.elem(idx) = idxrepl12;
-  cout << "SA22_:" << SA22_.size() << endl;
+  Rcpp::Rcout << "SA22_:" << SA22_.size() << endl;
   // #############################################################
   //remove index which are ambiguous;
   uvec idx1, idx2;
@@ -681,7 +681,7 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
     ind1.ones();
     ind1 = -ind1;
     ind1.elem(idx1).ones();
-    cout << "direction (compare with trait_1000Q_match.R): " << sum(ind1) << endl; //compare sum(ind) in R: Height_1000Q_match.R
+    Rcpp::Rcout << "direction (compare with trait_1000Q_match.R): " << sum(ind1) << endl; //compare sum(ind) in R: Height_1000Q_match.R
     
     bh1 = bh1 % ind1;
     
@@ -694,8 +694,8 @@ Rcpp::List matchscreen(std::string screenname, std::string stringname1,
     ind2.ones();
     ind2 = -ind2;
     ind2.elem(idx2).ones();
-    cout << "direction (compare with trait_1000Q_match.R): " << sum(ind2) << endl; //compare sum(ind) in R: Height_1000Q_match.R
-    cout << "Size of matched SNPs (remove ambiguous SNPs): " << A31_r.n_elem << endl;
+    Rcpp::Rcout << "direction (compare with trait_1000Q_match.R): " << sum(ind2) << endl; //compare sum(ind) in R: Height_1000Q_match.R
+    Rcpp::Rcout << "Size of matched SNPs (remove ambiguous SNPs): " << A31_r.n_elem << endl;
     bh2 = bh2 % ind2;
   }
   
