@@ -68,15 +68,6 @@ RemoveMHCCfun = function(mhcstart, mhcend, bh1, bh2, s12, s22, bp, chr,
     bpRmhc_xy = bpRmhc_x[-idy];
     chrRmhc_xy = chrRmhc_x[-idy];
     rsnameRmhc_xy = rsnameRmhc_x[-idy];
-    tmp0 = 1:length(bh1Rmhc_x);
-    tmp = tmp0[-idx];
-    
-    if(length(idx4panel)!=0){
-      idx4panelRmhc_xy = match(avbIndexRmhc_x[intersect((idx4panelRmhc_x + 1), tmp)], avbIndexRmhc_xy) -1;
-    }else{
-      idx4panelRmhc_xy = idx4panel;
-    }
-    
   }else{
     bh1Rmhc_xy = bh1Rmhc_x;
     bh2Rmhc_xy = bh2Rmhc_x;

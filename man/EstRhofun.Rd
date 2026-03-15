@@ -6,7 +6,8 @@
   from summary statistic files with LD clumping.
 }
 \usage{
-EstRhofun(fileexposure, fileoutcome, stringname3, ld_r2_thresh, lam, pth)
+EstRhofun(fileexposure, fileoutcome, stringname3, ld_r2_thresh, lam, pth,
+          block_file)
 }
 \arguments{
   \item{fileexposure}{Path to exposure summary statistics file.}
@@ -15,5 +16,6 @@ EstRhofun(fileexposure, fileoutcome, stringname3, ld_r2_thresh, lam, pth)
   \item{ld_r2_thresh}{LD r-squared threshold for clumping.}
   \item{lam}{Regularisation parameter for LD matrix estimation.}
   \item{pth}{P-value threshold for instrument selection.}
+  \item{block_file}{Path to the LD block definition file.}
 }
 \value{Estimated rho value.}

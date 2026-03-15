@@ -9,8 +9,12 @@ Authors@R:
 Description: Mendelian randomization accounting for complex correlated
     horizontal pleiotropy while elucidating shared genetic etiology.
 License: GPL (>= 3)
-Imports: 
-    Rcpp (>= 1.0.8.3)
+Imports:
+    Rcpp (>= 1.0.8.3),
+    ggplot2,
+    mvtnorm,
+    stats,
+    utils
 LinkingTo: 
     BH,
     Rcpp,

@@ -78,7 +78,7 @@ genSumStat <- function(x12, n1, n2, M, L, b1, rho_ag, Alrate, h2a, h2t, h2g){
   # The independent horizontal pleiotropy (theta).
   sigma2t <- 0.005;
   if(h2t==0){
-    theta0 = rep(0, m);
+    theta0 = rep(0, p);
     x12t = x12%*%theta0;
   }else{
     theta = rnorm(p)*sqrt(sigma2t);
@@ -283,7 +283,7 @@ traceplot <- function(bhatpoint){
 
 # ---------------------------------------------------------
 EstRhofun <- function(fileexposure, fileoutcome, stringname3,
-                      ld_r2_thresh, lam, pth){
+                      ld_r2_thresh, lam, pth, block_file){
   
   # Estimate the rho
   res = matchsnp(fileexposure, fileoutcome, stringname3, FALSE);
